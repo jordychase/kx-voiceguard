@@ -10,7 +10,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
 COPY *.py ./
 COPY LICENSE MODELS.md THIRD_PARTY_NOTICES.md ./
-RUN .venv/bin/python download_models.py && rm -f test_*.py bootstrap.py
+RUN .venv/bin/python download_models.py && .venv/bin/python model_smoke.py \
+    && rm -f test_*.py bootstrap.py
 ENV PATH="/app/.venv/bin:$PATH" VOICEGUARD_DB=/data/voiceguard.sqlite VOICEGUARD_ENABLED=false
 EXPOSE 8080
 ENTRYPOINT ["/app/.venv/bin/python", "entrypoint.py"]

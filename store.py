@@ -97,10 +97,27 @@ class Store:
         """Runs regardless of processing flags. Ciphertext deletion is not backup erasure."""
         now = time.time()
         with self.tx() as c:
+            # A stricter policy shortens existing TTLs; relaxing it never extends them.
+            rows = c.execute(
+                "SELECT e.tenant,e.subject,e.campaign,e.created,e.expires,s.body "
+                "FROM embedding e JOIN consent s ON s.tenant=e.tenant AND s.id=e.consent"
+            ).fetchall()
+            for row in rows:
+                consent = json.loads(row["body"])
+                days = [
+                    self.config(c, row["tenant"], "state:" + state).get("retention_days", 90)
+                    for state in consent["states"]
+                ]
+                expiry = min(row["expires"], row["created"] + min(days, default=90) * 86400)
+                if expiry < row["expires"]:
+                    c.execute(
+                        "UPDATE embedding SET expires=? WHERE tenant=? AND subject=? AND campaign=?",
+                        (expiry, row["tenant"], row["subject"], row["campaign"]),
+                    )
             count = c.execute(
-                "DELETE FROM embedding WHERE expires<=? OR EXISTS "
+                "DELETE FROM embedding WHERE expires<=? OR NOT EXISTS "
                 "(SELECT 1 FROM consent s WHERE s.tenant=embedding.tenant AND s.id=embedding.consent "
-                "AND (s.revoked=1 OR s.expires<=?))",
+                "AND s.revoked=0 AND s.expires>?)",
                 (now, now),
             ).rowcount
             c.execute(

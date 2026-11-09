@@ -440,3 +440,17 @@ def test_audit_does_not_contain_audio_or_vectors(env):
     assert r.status_code == 200
     assert "audio_b64" not in r.text and p["subject_id"] not in r.text
     assert "vector" not in r.text
+
+
+def test_retention_reduction_purges_old_vectors_while_disabled(env):
+    p = ready(env)
+    post(env, p)
+    store = env[1].state.store
+    identity = next(iter(env[2].actors.values()))
+    with store.tx() as c:
+        c.execute("UPDATE embedding SET created=?", (time.time() - 2 * 86400,))
+        config = store.config(c, identity.tenant, "state:FL")
+    config["retention_days"] = 1
+    store.set_config(identity, "state:FL", config)
+    env[2].enabled = False
+    assert store.purge() == 1

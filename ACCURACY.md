@@ -33,3 +33,21 @@ telephone compression and replay hardware. Never conflate speaker similarity wit
 
 Pretrained inference and targeted calibration are the economical first step. Training a new
 foundation model or adding Whisper transcription does not solve the speaker-matching requirement.
+
+## Score evaluation helper
+
+`uv run python evaluate_scores.py scores.csv --threshold 0.8` reports held-out counts, false accepts/
+rejects and Wilson intervals. `0.8` is only a command example, not a recommended threshold.
+CSV columns: `model_id,split,left_subject,right_subject,left_call,right_call,label,score`.
+Use opaque UUIDs for subjects/calls, `tuning` or `test` for split, and `genuine` or `impostor` for label.
+The helper rejects speaker leakage across splits, reused/reversed pairs, same-call comparisons,
+non-finite scores, wrong model IDs and labels inconsistent with subject IDs. It does not verify the
+underlying labels, consent or collection protocol, auto-approve a policy, or create a model threshold.
+The example requires your own properly collected scores; no private voice data is supplied here.
+
+Railway's [published rates](https://railway.com/pricing) checked November 9, 2026 are
+$0.00000772/vCPU-second, $0.00000386/GB-second RAM, $0.00000006/GB-second volume, and $0.05/GB egress.
+For illustration, continuously consuming 2 vCPU plus 1 GB RAM costs $0.06948/compute-hour before
+storage, egress and plan minimums. At a **hypothetical measured** 10 audio-hours/compute-hour, that
+active CPU/RAM portion would be $0.006948/audio-hour. Idle RAM, plan minimums and actual cloud
+throughput can dominate a small pilot. These are rate calculations, not a measured service bill.

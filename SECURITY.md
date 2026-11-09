@@ -22,8 +22,8 @@
   telephony vendor may separately record; configure its retention and consent independently.
 - Encrypted vectors expire no later than consent expiry or the stricter state retention limit
   (default 30, maximum 90 days). Current policies/consents are rechecked before every comparison.
-  Candidate policy retention reductions prevent further use immediately; physical expiry cleanup
-  still follows the stored expiry unless the operator explicitly deletes the subject sooner.
+  Candidate policy retention reductions prevent further use immediately; the sweeper also shortens
+  stored expiration times and deletes overdue ciphertext within its next successful one-minute run.
 - A one-minute sweeper operates while processing is disabled. Revocation immediately deletes linked
   live vectors and prevents further use; subject deletion removes live consent metadata too.
   SQLite secure_delete and WAL truncation bound remnants on the live database. Filesystem snapshots,

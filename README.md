@@ -111,3 +111,12 @@ challenge/step-up evidence; similarity alone cannot distinguish a real speaker f
 The MIT license permits reuse and modification. Fraud-only purpose restrictions are enforced by
 this application's API contract, not by a non-open-source field-of-use license. Forks can modify
 code; API attestations do not prove the caller's true purpose.
+
+Optional full-model integration test (synthetic audio only):
+
+```sh
+VOICEGUARD_SYNTHETIC_WAV=/absolute/path/to/synthetic-16k-mono.wav uv run pytest -q
+```
+
+This exercises the actual HTTP enrollment and live WebSocket window using pinned models. Without
+that explicit fixture, the real-audio integration test is skipped; security/control tests still run.

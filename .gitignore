@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.onnx
+.env
+.env.*
+!.env.example
+*.sqlite*
+data/
+*.wav
+*.pcm
+*.log
+railway.json
+railway.toml.local
+verification-private.json

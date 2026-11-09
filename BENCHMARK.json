@@ -1,0 +1,40 @@
+{
+  "input": "OS-generated synthetic speech; functional smoke only, not accuracy validation",
+  "audio_seconds": 31.77,
+  "model_id": "wespeaker-en-resnet34-lm:e9848563da86",
+  "measurements": [
+    {
+      "run": 1,
+      "compute_seconds": 0.7355,
+      "realtime_multiple": 43.2,
+      "embedding_dimensions": 256,
+      "quality": {
+        "speech_seconds": 31.54,
+        "clipping_fraction": 0.0,
+        "single_speaker": "caller_attested_not_diarized"
+      }
+    },
+    {
+      "run": 2,
+      "compute_seconds": 0.4861,
+      "realtime_multiple": 65.37,
+      "embedding_dimensions": 256,
+      "quality": {
+        "speech_seconds": 31.54,
+        "clipping_fraction": 0.0,
+        "single_speaker": "caller_attested_not_diarized"
+      }
+    },
+    {
+      "run": 3,
+      "compute_seconds": 0.5396,
+      "realtime_multiple": 58.89,
+      "embedding_dimensions": 256,
+      "quality": {
+        "speech_seconds": 31.54,
+        "clipping_fraction": 0.0,
+        "single_speaker": "caller_attested_not_diarized"
+      }
+    }
+  ]
+}

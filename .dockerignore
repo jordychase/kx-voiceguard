@@ -1,0 +1,12 @@
+.git
+.venv
+.env*
+*.onnx
+*.wav
+*.aiff
+*.sqlite*
+data
+__pycache__
+.pytest_cache
+.ruff_cache
+verification-private.json
